@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cylla's Dashboard</title>
+
+  <style>
+
+    :root {
+      --primary: #00f2ff;
+      --secondary: #ff0055;
+      --bg-dark: #0b0c15;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text-main: #ffffff;
+      --font-tech: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-tech);
+      background: radial-gradient(circle at top left, #1a1f3c, #000000);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 85%;
+      max-width: 700px;
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+
+    /* KARTU */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px); 
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 16px;
+      margin-top: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 8px;
+      border: 1px solid var(--primary);
+      border-radius: 50px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px var(--primary);
+    }
+
+    button:hover {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 20px var(--primary);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    input {
+      padding: 12px;
+      width: 60%;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 10px var(--secondary);
+    }
+
+    /*Daftar Item (List)*/
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto; 
+    }
+
+    ul::-webkit-scrollbar {
+      width: 8px;
+    }
+    ul::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.08);
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: left;
+      border-left: 3px solid var(--secondary);
+      display: flex;
+      justify-content: space-between;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    #bio p {
+      line-height: 1.6;
+      color: #ddd;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>CYLLA'S DASHBOARD</h1>
+
+    <!-- FITUR 1: KARTU IDENTITAS -->
+    <div class="card" id="bioCard" style="border-color: var(--primary);">
+      <h2>// MY IDENTITY</h2>
+      
+      <button onclick="tampilkanBio()">
+        <span>&#128274;</span> Dekripsi Data
+      </button>
+
+      <!-- Teks biodata -->
+      <div id="bio" style="margin-top: 15px; font-family: monospace;"></div>
+    </div>
+
+    <!-- FITUR 2: KONTROL WARNA -->
+    <div class="card">
+      <h2>// THEME CONTROL</h2>
+      <p style="font-size: 0.9rem; opacity: 0.7;">Ubah warna tema antarmuka:</p>
+      
+      <button onclick="ubahWarna()">
+        ubah     </button>
+    </div>
+
+    <!-- FITUR 3: DAFTAR LIST -->
+    <div class="card" style="border-color: var(--secondary);">
+      <h2>// COMMAND LIST</h2>
+      
+      <input type="text" id="input Kegiatan" placeholder="Masukkan perintah baru...">
+      
+      <button onclick="tambahList()" style="border-color: var(--secondary); color: var(--secondary); box-shadow: 0 0 5px var(--secondary);">
+        Upload
+      </button>
+
+      <ul id="list Kegiatan">
+        <li></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+
+    //JAVASCRIPT
+
+    // FITUR 1 : Menampilkan Biodata
+    function tampilkanBio() {
+      const bioContainer = document.getElementById("bio");
+      
+      // Mengecek jika sudah ada, agar tidak double saat diklik
+      if(bioContainer.innerHTML === "") {
+        bioContainer.innerHTML = `
+          <p><strong>Nama:</strong> Marcella Septiani</p>
+          <p><strong>No BP:</strong> 2410432019</p>
+          <p><strong>Jurusan:</strong> Matematika</p>
+          <p><strong>Divisi:</strong> Programming</p>
+          <p><strong>Sub Divisi:</strong> Web Programming</p>
+        `;
+        // Efek fade-in 
+        bioContainer.style.opacity = 0;
+        let op = 0.1;
+        let timer = setInterval(function () {
+            if (op >= 1){
+                clearInterval(timer);
+            }
+            bioContainer.style.opacity = op;
+            bioContainer.style.filter = 'alpha(opacity='+ op*100 +")";
+            op += op * 0.1;
+        }, 10);
+      } else {
+        bioContainer.innerHTML = "";
+      }
+    }
+
+    // FITUR 2 : Mengubah warna Kartu
+    function ubahWarna() {
+      const card = document.getElementById("bioCard"); 
+
+      const warna = [
+        "rgba(0, 242, 255, 0.2)", // Cyan Glass
+        "rgba(255, 0, 85, 0.2)", // Pink Glass
+        "rgba(138, 43, 226, 0.2)", // Purple Glass
+        "rgba(50, 205, 50, 0.2)", // Lime Glass
+        "rgba(255, 215, 0, 0.2)"  // Gold Glass
+      ];
+      
+      const borderColor = ["#00f2ff", "#ff0055", "#8a2be2", "#32cd32", "#ffd700"];
+
+      const randomIndex = Math.floor(Math.random() * warna.length);
+
+      card.style.backgroundColor = warna[randomIndex];
+      card.style.borderColor = borderColor[randomIndex];
+      
+      card.style.boxShadow = `0 0 20px ${borderColor[randomIndex]}`;
+    }
+
+    // FITUR 3 : Menambahkan list dengan animasi
+    function tambahList() {
+      const input = document.getElementById("input Kegiatan");
+      const listContainer = document.getElementById("list Kegiatan");
+      const isiInput = input.value;
+
+      if(isiInput.trim() !== "") {
+        const li = document.createElement("li");
+        
+        const now = new Date();
+        const timeString = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+        
+        li.innerHTML = `<span>> ${isiInput}</span> <small style='opacity:0.5'>${timeString}</small>`;
+        
+        listContainer.prepend(li);
+        
+        input.value = "";
+        input.focus();
+      } else {
+        alert("Error: Perintah tidak boleh kosong!");
+      }
+    }
+
+  </script>
+</body>
+</html>
